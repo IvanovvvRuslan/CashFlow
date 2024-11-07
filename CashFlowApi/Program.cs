@@ -1,4 +1,7 @@
 
+using CashFlowApi.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace CashFlowApi
 {
     public class Program
@@ -6,6 +9,10 @@ namespace CashFlowApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+
 
             // Add services to the container.
 
