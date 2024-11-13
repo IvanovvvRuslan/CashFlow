@@ -16,7 +16,7 @@ namespace CashFlowApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -29,12 +29,17 @@ namespace CashFlowApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
+                    b.Property<string>("CompanyAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EmailAccountId")
+                    b.Property<string>("CompanyEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ContactUserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -43,10 +48,11 @@ namespace CashFlowApi.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PhoneAccountId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ContactUserId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Companies");
                 });
@@ -60,7 +66,6 @@ namespace CashFlowApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -81,11 +86,7 @@ namespace CashFlowApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmailAccountId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,7 +96,10 @@ namespace CashFlowApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneAccountId")
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserEmail")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -105,76 +109,91 @@ namespace CashFlowApi.Migrations
 
             modelBuilder.Entity("CashFlowApi.Models.UserCompany", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "CompanyId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CompanyId");
+                    b.HasKey("CompanyId", "UserId");
 
-                    b.ToTable("UserCompanies");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCompany");
+                });
+
+            modelBuilder.Entity("CashFlowApi.Models.UserPhone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPhones");
                 });
 
             modelBuilder.Entity("CashFlowApi.Models.UserRole", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RoleId");
+                    b.HasKey("RoleId", "UserId");
 
-                    b.ToTable("UserRoles");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("CompanyUser", b =>
+            modelBuilder.Entity("CashFlowApi.Models.Company", b =>
                 {
-                    b.Property<int>("CompaniesId")
-                        .HasColumnType("int");
+                    b.HasOne("CashFlowApi.Models.User", "ContactUser")
+                        .WithMany("ContactCompanies")
+                        .HasForeignKey("ContactUserId");
 
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
+                    b.HasOne("CashFlowApi.Models.User", "CompanyOwner")
+                        .WithMany("CompaniesOwner")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("CompaniesId", "UsersId");
+                    b.Navigation("CompanyOwner");
 
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("CompanyUser");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RoleUser");
+                    b.Navigation("ContactUser");
                 });
 
             modelBuilder.Entity("CashFlowApi.Models.UserCompany", b =>
                 {
                     b.HasOne("CashFlowApi.Models.Company", "Company")
-                        .WithMany("UserCompanies")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CashFlowApi.Models.User", "User")
-                        .WithMany("UserCompanies")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -182,18 +201,29 @@ namespace CashFlowApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CashFlowApi.Models.UserRole", b =>
+            modelBuilder.Entity("CashFlowApi.Models.UserPhone", b =>
                 {
-                    b.HasOne("CashFlowApi.Models.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("CashFlowApi.Models.User", "PhoneUser")
+                        .WithMany("UserPhones")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("PhoneUser");
+                });
+
+            modelBuilder.Entity("CashFlowApi.Models.UserRole", b =>
+                {
+                    b.HasOne("CashFlowApi.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("CashFlowApi.Models.User", "User")
-                        .WithMany("UserRoles")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -201,51 +231,13 @@ namespace CashFlowApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CompanyUser", b =>
-                {
-                    b.HasOne("CashFlowApi.Models.Company", null)
-                        .WithMany()
-                        .HasForeignKey("CompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CashFlowApi.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("CashFlowApi.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CashFlowApi.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CashFlowApi.Models.Company", b =>
-                {
-                    b.Navigation("UserCompanies");
-                });
-
-            modelBuilder.Entity("CashFlowApi.Models.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
             modelBuilder.Entity("CashFlowApi.Models.User", b =>
                 {
-                    b.Navigation("UserCompanies");
+                    b.Navigation("CompaniesOwner");
 
-                    b.Navigation("UserRoles");
+                    b.Navigation("ContactCompanies");
+
+                    b.Navigation("UserPhones");
                 });
 #pragma warning restore 612, 618
         }
