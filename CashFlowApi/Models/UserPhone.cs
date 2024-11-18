@@ -11,6 +11,6 @@ namespace CashFlowApi.Models
         public string? Description { get; set; }
 
         //Navigation properties
-        public User PhoneUser { get; set; }
+        public User User { get; set; }
     }
 }

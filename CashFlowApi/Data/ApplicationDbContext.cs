@@ -33,8 +33,8 @@ namespace CashFlowApi.Data
                     j => j.HasOne(ur => ur.User).WithMany().HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Restrict));
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.UserPhones)
-                .WithOne(up => up.PhoneUser)
+                .HasMany(u => u.Phones)
+                .WithOne(up => up.User)
                 .HasForeignKey(up => up.UserId);
 
             modelBuilder.Entity<User>()
@@ -44,7 +44,7 @@ namespace CashFlowApi.Data
 
             modelBuilder.Entity<User>()
                .HasMany(u => u.CompaniesOwner)
-               .WithOne(co => co.CompanyOwner)
+               .WithOne(co => co.Owner)
                .HasForeignKey(cc => cc.OwnerId);
         }
     }
