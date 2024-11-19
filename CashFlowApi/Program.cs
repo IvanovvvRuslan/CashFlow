@@ -1,5 +1,6 @@
 
 using CashFlowApi.Data;
+using CashFlowApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashFlowApi
@@ -13,10 +14,14 @@ namespace CashFlowApi
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
+            builder.Services.AddAutoMapper(typeof(Program));
 
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddScoped<IUserService, UserService>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
