@@ -46,6 +46,37 @@ namespace CashFlowApi.Data
                .HasMany(u => u.CompaniesOwner)
                .WithOne(co => co.Owner)
                .HasForeignKey(cc => cc.OwnerId);
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "AdminTestUser",
+                    Password = "admin",
+                    Email = "admintest@company.com",
+                    Description = "Admin test account",
+                });
+
+            modelBuilder.Entity<Role>().HasData(
+                new Role
+                {
+                    Id = 1,
+                    Name = "AdminTestRole",
+                    Description = "Admin test role",
+                });
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    Id = 1,
+                    Name = "TestCompany",
+                    OwnerId = 1,
+                    ContactUserId = 1,
+                    Email = "testcompany@company.com",
+                    Address = "testaddress",
+                    Description = "Test Cpmpany"
+                });
+
         }
     }
 }

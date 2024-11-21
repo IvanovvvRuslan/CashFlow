@@ -139,6 +139,21 @@ namespace CashFlowApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[] { 1, "Admin test role", "AdminTestRole" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Description", "Email", "Name", "Password" },
+                values: new object[] { 1, "Admin test account", "admintest@company.com", "AdminTestUser", "admin" });
+
+            migrationBuilder.InsertData(
+                table: "Companies",
+                columns: new[] { "Id", "Address", "ContactUserId", "Description", "Email", "Name", "OwnerId" },
+                values: new object[] { 1, "testaddress", 1, "Test Cpmpany", "testcompany@company.com", "TestCompany", 1 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Companies_ContactUserId",
                 table: "Companies",

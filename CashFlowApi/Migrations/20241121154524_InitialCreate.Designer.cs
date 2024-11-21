@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241120134252_InitialCreate")]
+    [Migration("20241121154524_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -58,6 +58,18 @@ namespace CashFlowApi.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "testaddress",
+                            ContactUserId = 1,
+                            Description = "Test Cpmpany",
+                            Email = "testcompany@company.com",
+                            Name = "TestCompany",
+                            OwnerId = 1
+                        });
                 });
 
             modelBuilder.Entity("CashFlowApi.Models.Role", b =>
@@ -78,6 +90,14 @@ namespace CashFlowApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Admin test role",
+                            Name = "AdminTestRole"
+                        });
                 });
 
             modelBuilder.Entity("CashFlowApi.Models.User", b =>
@@ -106,6 +126,16 @@ namespace CashFlowApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Admin test account",
+                            Email = "admintest@company.com",
+                            Name = "AdminTestUser",
+                            Password = "admin"
+                        });
                 });
 
             modelBuilder.Entity("CashFlowApi.Models.UserCompany", b =>
