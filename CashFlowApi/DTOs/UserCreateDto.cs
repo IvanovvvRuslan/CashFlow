@@ -1,11 +1,12 @@
 ﻿using CashFlowApi.Models;
 
-namespace CashFlowApi.ViewModels
+namespace CashFlowApi.DTOs
 {
-    public class UserViewModel
+    public class UserCreateDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
         public string? Description { get; set; }
     }

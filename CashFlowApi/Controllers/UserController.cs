@@ -40,7 +40,7 @@ namespace CashFlowApi.Controllers
         // GET: UserController/Create
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create ([FromBody]UserDto userDto)
+        public async Task<ActionResult> Create ([FromBody]UserCreateDto userDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -51,24 +51,24 @@ namespace CashFlowApi.Controllers
         }
 
         // POST: UserController/Edit/5
-        [HttpPut ("{id}")]
+        //[HttpPut ("{id}")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update([FromRoute]int id, [FromBody] UserDto userDto)
-        {
-            try
-            {
-                await _userService.Update(id, userDto);
-                return Ok("User updated");
-            }
-            catch (NotFoundException ex)
-            { 
-                return NotFound(ex.Message); 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);                
-            }
-        }
+        //public async Task<ActionResult> Update([FromRoute]int id, [FromBody] UserDto userDto)
+        //{
+        //    try
+        //    {
+        //        await _userService.Update(id, userDto);
+        //        return Ok("User updated");
+        //    }
+        //    catch (NotFoundException ex)
+        //    { 
+        //        return NotFound(ex.Message); 
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);                
+        //    }
+        //}
 
         // POST: UserController/Delete/5
         [HttpDelete ("{id}")]

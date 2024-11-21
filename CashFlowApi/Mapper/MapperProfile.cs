@@ -10,7 +10,7 @@ namespace CashFlowApi.Mapper
         public MapperProfile()
         {
             CreateMap<User, UserViewModel>();
-            CreateMap<User, UserDto>()
+            CreateMap<User, UserCreateDto>()
                 .ReverseMap();
         }
     }

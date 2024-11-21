@@ -13,8 +13,8 @@ namespace CashFlowApi.Services
     {
         Task<IEnumerable<UserViewModel>> GetAll();
         Task<UserViewModel> GetById(int id);
-        Task Create(UserDto userDto);
-        Task Update(int id, UserDto userDto);
+        Task Create(UserCreateDto userDto);
+        //Task Update(int id, UserDto userDto);
         Task Delete(int id);
     }
 
@@ -53,7 +53,7 @@ namespace CashFlowApi.Services
             return userViewModel;
         }
 
-        public async Task Create(UserDto userDto)
+        public async Task Create(UserCreateDto userDto)
         { 
             var user = _mapper.Map<User>(userDto);
             _context.Users.Add(user);
@@ -61,25 +61,25 @@ namespace CashFlowApi.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(int id, UserDto userDto)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        //public async Task Update(int id, UserDto userDto)
+        //{
+        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user == null)
-                throw new NotFoundException("User not found");
+        //    if (user == null)
+        //        throw new NotFoundException("User not found");
 
-            user.Name = userDto.Name;
-            user.Password = userDto.Password;
-            user.Email = userDto.Email;
-            user.Description = userDto.Description;
-            user.Roles = userDto.Roles;
-            user.Phones = userDto.Phones;
-            user.Companies = userDto.Companies;
-            user.ContactCompanies = userDto.ContactCompanies;
-            user.CompaniesOwner = userDto.CompaniesOwner;
+        //    user.Name = userDto.Name;
+        //    user.Password = userDto.Password;
+        //    user.Email = userDto.Email;
+        //    user.Description = userDto.Description;
+        //    user.Roles = userDto.Roles;
+        //    user.Phones = userDto.Phones;
+        //    user.Companies = userDto.Companies;
+        //    user.ContactCompanies = userDto.ContactCompanies;
+        //    user.CompaniesOwner = userDto.CompaniesOwner;
 
-            await _context.SaveChangesAsync();
-        }
+        //    await _context.SaveChangesAsync();
+        //}
 
         public async Task Delete(int id)
         {

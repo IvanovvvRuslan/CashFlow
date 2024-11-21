@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118140858_InitialCreate")]
+    [Migration("20241120134252_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -91,8 +91,9 @@ namespace CashFlowApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Email")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
